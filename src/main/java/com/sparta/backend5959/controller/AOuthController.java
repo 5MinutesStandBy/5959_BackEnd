@@ -9,13 +9,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-public class OauthController {
+public class AOuthController {
 
     private final KakaoUserService kakaoUserService;
 
+    // 카카오 로그인
     @GetMapping("/user/kakao/callback")
     public String kakaoLogin(@RequestParam String code) throws JsonProcessingException {
         kakaoUserService.kakaoLogin(code);
         return "redirect:/";
     }
+    
 }
