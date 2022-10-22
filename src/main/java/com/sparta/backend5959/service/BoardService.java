@@ -9,7 +9,6 @@ import com.sparta.backend5959.repository.BoardRepository;
 import com.sparta.backend5959.repository.CommentRepository;
 import com.sparta.backend5959.repository.HeartRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -32,13 +31,18 @@ public class BoardService {
         return boardRepository.findAllByOrderByModifiedAtDesc();
     }
 
-    // 게시판 페이저로 불러오기
+    // 게시판 페이지로 불러오기
     public ResponseDto<?> getBoardPagerList(int page,int size,String sortBy,boolean isAsc) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
         return ResponseDto.success(boardRepository.findAll(pageable));
     }
+
+    // 게시판 무한 스크롤로 불러오기
+    public ResponseDto<?> getBoardInfiniteScroll(PageRequest pageRequest) {
+        return ResponseDto.success(boardRepository.findFirstBy(pageRequest));
+    };
 
     // 게시판 하나만 불러오기 (+해당 게시글 댓글)
     @Transactional

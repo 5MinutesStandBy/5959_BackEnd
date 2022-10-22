@@ -40,10 +40,10 @@ public class Board extends Timestamped {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Comments> commentList = new java.util.ArrayList<>();
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Heart> HeartList = new java.util.ArrayList<>();
 
     public Board(BoardReqDto boardReqDto, Member member) {

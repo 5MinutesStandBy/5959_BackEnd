@@ -19,5 +19,10 @@ public class AOuthController {
         kakaoUserService.kakaoLogin(code);
         return "redirect:/";
     }
+
+    @GetMapping("/")
+    public String testAouth() {
+        return "index.html";
+    }
     
 }

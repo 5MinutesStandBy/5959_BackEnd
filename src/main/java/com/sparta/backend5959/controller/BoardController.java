@@ -5,6 +5,7 @@ import com.sparta.backend5959.dto.ResponseDto;
 import com.sparta.backend5959.security.MemberDetails;
 import com.sparta.backend5959.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,14 +24,22 @@ public class BoardController {
         return ResponseDto.success(boardService.getBoardList());
     }
 
-    // 게시판 전체 페이징 조회 GET /boards/pager?page=3&size=10&sort=id,DESC  + Board Total Count
+    // 게시판 전체 페이징 조회 GET /boards/pager?page=3&size=10&sortBy=id&isAsc=true  + Board Total Count
     @GetMapping ("/boards/pager")
     public ResponseDto<?> getBoardPagerList(
             @RequestParam("page") int page,
             @RequestParam("size") int size,
             @RequestParam("sortBy") String sortBy,
             @RequestParam("isAsc") boolean isAsc) {
-        return boardService.getBoardPagerList(page,size,sortBy,isAsc);
+        int pageTemp = page - 1;
+        return boardService.getBoardPagerList(pageTemp,size,sortBy,isAsc);
+    }
+
+    // 게시판 전체 무한 스크롤 조회 GET
+    @GetMapping ("/boards/infinites")
+    public ResponseDto<?> getBoardInfinite(@RequestParam("page") Integer page, @RequestParam("size") Integer size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return boardService.getBoardInfiniteScroll(pageRequest);
     }
 
     // 게시판 하나만 가져오기

@@ -35,7 +35,7 @@ public class Comments extends Timestamped {
     private Member member;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
     private List<Heart> HeartList = new java.util.ArrayList<>();
 
 

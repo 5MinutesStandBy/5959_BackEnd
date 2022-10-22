@@ -53,12 +53,11 @@ public class KakaoUserService {
         // HTTP Header 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
         // HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         // 카카오 RestAPI
-        body.add("client_id", "5d5e813ce58f1ee30e95321356cdb438");
+        body.add("client_id", "");
         body.add("redirect_uri", "http://localhost:8080/user/kakao/callback");
         body.add("code", code);
 
@@ -96,6 +95,7 @@ public class KakaoUserService {
                 String.class
         );
 
+        // 여기를 통해 카카오 JSON 데이터를 꺼내옴 = 네이버 구글도 여기만 바꾸면 정보 가져올 수 있음
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
