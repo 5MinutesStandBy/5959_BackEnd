@@ -137,7 +137,7 @@ public class TokenProvider {
                     .setSigningKey(key)
                     // HMAC-SHA algorithm으로 암호화 시켰던 서버 시크릿 키 값 넣어주고
                     .build()
-                    // 다시 필드 값 세팅
+                    // 다시 멤버 값 세팅
                     .parseClaimsJws(jwt);
                     // 세팅된 시크릿 키로 가장 겉껍데기 복호화
                     return true;

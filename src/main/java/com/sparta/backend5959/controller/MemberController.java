@@ -3,7 +3,6 @@ package com.sparta.backend5959.controller;
 
 import com.sparta.backend5959.dto.*;
 import com.sparta.backend5959.service.MemberService;
-import com.sparta.backend5959.service.KakaoUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +15,6 @@ import javax.validation.Valid;
 public class MemberController {
 
     private final MemberService memberService;
-    private final KakaoUserService kakaoUserService;
 
     // 회원 가입
     @PostMapping("/signup")
@@ -36,7 +34,4 @@ public class MemberController {
         System.out.println(tokenRequestDto);
         return ResponseEntity.ok(memberService.reissue(tokenRequestDto));
     }
-
-
-
 }

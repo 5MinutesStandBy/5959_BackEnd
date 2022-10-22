@@ -40,8 +40,11 @@ public class BoardService {
     }
 
     // 게시판 무한 스크롤로 불러오기
-    public ResponseDto<?> getBoardInfiniteScroll(PageRequest pageRequest) {
-        return ResponseDto.success(boardRepository.findFirstBy(pageRequest));
+    public ResponseDto<?> getBoardInfiniteScroll(int page,int size,String sortBy,boolean isAsc) {
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return ResponseDto.success(boardRepository.findAllByOrderById(pageable));
     };
 
     // 게시판 하나만 불러오기 (+해당 게시글 댓글)

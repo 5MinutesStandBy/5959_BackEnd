@@ -19,17 +19,14 @@ public class Member extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long member_id;
 
-    @NotBlank(message = "아이디를 입력해주세요")
     @Column(nullable = false, unique = true)
     private String username;
 
     @JsonIgnore
-    @NotBlank(message = "비밀번호를 입력해주세요")
     @Column(nullable = false)
     private String password;
 
     @JsonIgnore
-    @NotBlank(message = "이메일을 입력해주세요")
     @Column(nullable = false)
     private String email;
 
