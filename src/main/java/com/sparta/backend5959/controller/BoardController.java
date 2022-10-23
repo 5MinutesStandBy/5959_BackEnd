@@ -20,7 +20,7 @@ public class BoardController {
     // 게시판 전체 조회
     @GetMapping("/boards")
     public ResponseDto<?> getBoardList() {
-        return ResponseDto.success(boardService.getBoardList());
+        return boardService.getBoardList();
     }
 
     // 게시판 전체 페이징 조회 GET /boards/pager?page=3&size=10&sortBy=id&isAsc=true  + Board Total Count
@@ -42,40 +42,38 @@ public class BoardController {
             @RequestParam("sortBy") String sortBy,
             @RequestParam("isAsc") boolean isAsc) {
         int pageTemp = page - 1;
-//        PageRequest pageRequest = PageRequest.of(pageTemp, size, sortBy, isAsc);
         return boardService.getBoardInfiniteScroll(pageTemp, size, sortBy, isAsc);
     }
 
     // 게시판 하나만 가져오기
-    @PostMapping("/boards/{id}")
+    @GetMapping("/boards/{id}")
     public ResponseDto<?> getBoard(@PathVariable Long id) {
-        return ResponseDto.success(boardService.getBoard(id));
+        return boardService.getBoard(id);
     }
 
     // 게시판 생성 (권한 필요)
-    @PostMapping("/auth/boards")
+    @PostMapping("/boards")
     public ResponseDto<?> createBoard(
             @RequestBody @Valid BoardReqDto boardReqDto,
             @AuthenticationPrincipal MemberDetails memberDetails
             ) {
-        return ResponseDto.success(boardService.createBoard(boardReqDto, memberDetails.getMember()));
+        return boardService.createBoard(boardReqDto, memberDetails.getMember());
     }
 
     // 게시판 수정 (권한 필요)
-    @PutMapping("/auth/boards/{id}")
+    @PutMapping("/boards/{id}")
     public ResponseDto<?> editBoard(
             @PathVariable Long id,
             @RequestBody BoardReqDto boardReqDto,
             @AuthenticationPrincipal MemberDetails memberDetails) {
-        return ResponseDto.success(boardService.editBoard(id, boardReqDto, memberDetails.getMember()));
+        return boardService.editBoard(id, boardReqDto, memberDetails.getMember());
     }
 
     //게시판 삭제 (권한 필요)
-    @DeleteMapping("/auth/boards/{id}")
+    @DeleteMapping("/boards/{id}")
     public ResponseDto<?> deleteBoard(
             @PathVariable Long id,
             @AuthenticationPrincipal MemberDetails memberDetails) {
-        boardService.deleteBoard(id, memberDetails.getMember());
-        return ResponseDto.success("게시글 삭제 완료");
+        return boardService.deleteBoard(id, memberDetails.getMember());
     }
 }

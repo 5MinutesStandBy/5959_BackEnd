@@ -1,6 +1,5 @@
 package com.sparta.backend5959.service;
 
-import com.sparta.backend5959.dto.KakaoUserInfoDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,7 +8,6 @@ import com.sparta.backend5959.repository.MemberRepository;
 import com.sparta.backend5959.security.Authority;
 import com.sparta.backend5959.security.MemberDetails;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -26,31 +24,28 @@ import org.springframework.web.client.RestTemplate;
 import java.util.UUID;
 
 @Service
-public class KakaoUserService {
+public class NaverUserService {
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
 
-    @Value("#{environment['kakao.Key']}")
-    private String key;
-
     @Autowired
-    public KakaoUserService(MemberRepository memberRepository, PasswordEncoder passwordEncoder) {
+    public NaverUserService(MemberRepository memberRepository, PasswordEncoder passwordEncoder) {
         this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void kakaoLogin(String code) throws JsonProcessingException {
+    public void naverLogin(String code) throws JsonProcessingException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getAccessToken(code);
 
         // 2. 토큰으로 카카오 API 호출
-        KakaoUserInfoDto kakaoUserInfo = getKakaoUserInfo(accessToken);
+        naverUserInfoDto naverUserInfo = getnaverUserInfo(accessToken);
 
         // 3. 필요시에 회원가입
-        Member kakaoUsers = registerKakaoUserIfNeeded(kakaoUserInfo);
+        Member NaverUsers = registerNaverUserIfNeeded(naverUserInfo);
 
         // 4. 강제 로그인 처리
-        forceLogin(kakaoUsers);
+        forceLogin(NaverUsers);
     }
 
     private String getAccessToken(String code) throws JsonProcessingException {
@@ -61,18 +56,18 @@ public class KakaoUserService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         // 카카오 RestAPI
-        body.add("client_id", key);
-        body.add("redirect_uri", "http://localhost:8080/user/kakao/callback");
+        body.add("client_id", "");
+        body.add("redirect_uri", "");
         body.add("code", code);
 
         // HTTP 요청 보내기
-        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
+        HttpEntity<MultiValueMap<String, String>> naverTokenRequest =
                 new HttpEntity<>(body, headers);
         RestTemplate rt = new RestTemplate();
         ResponseEntity<String> response = rt.exchange(
                 "https://kauth.kakao.com/oauth/token",
                 HttpMethod.POST,
-                kakaoTokenRequest,
+                naverTokenRequest,
                 String.class
         );
 
@@ -83,19 +78,19 @@ public class KakaoUserService {
         return jsonNode.get("access_token").asText();
     }
 
-    private KakaoUserInfoDto getKakaoUserInfo(String accessToken) throws JsonProcessingException {
+    private naverUserInfoDto getnaverUserInfo(String accessToken) throws JsonProcessingException {
         // HTTP Header 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         // HTTP 요청 보내기
-        HttpEntity<MultiValueMap<String, String>> kakaoUserInfoRequest = new HttpEntity<>(headers);
+        HttpEntity<MultiValueMap<String, String>> naverUserInfoRequest = new HttpEntity<>(headers);
         RestTemplate rt = new RestTemplate();
         ResponseEntity<String> response = rt.exchange(
                 "https://kapi.kakao.com/v2/user/me",
                 HttpMethod.POST,
-                kakaoUserInfoRequest,
+                naverUserInfoRequest,
                 String.class
         );
 
@@ -110,46 +105,46 @@ public class KakaoUserService {
                 .get("email").asText();
 
         System.out.println("카카오 사용자 정보: " + id + ", " + nickname + ", " + email);
-        return new KakaoUserInfoDto(id, nickname, email);
+        return new naverUserInfoDto(id, nickname, email);
     }
 
-    private Member registerKakaoUserIfNeeded(KakaoUserInfoDto kakaoUserInfo) {
+    private Member registerNaverUserIfNeeded(naverUserInfoDto naverUserInfo) {
         // DB 에 중복된 Kakao Id 가 있는지 확인
-        Long kakaoId = kakaoUserInfo.getId();
-        Member kakaoMember = memberRepository.findByKakaoId(kakaoId)
+        Long kakaoId = naverUserInfo.getId();
+        Member naverMember = memberRepository.findByKakaoId(kakaoId)
                 .orElse(null);
-        if (kakaoMember == null) {
+        if (naverMember == null) {
             // 카카오 사용자 이메일과 동일한 이메일을 가진 회원이 있는지 확인
-            String kakaoEmail = kakaoUserInfo.getEmail();
+            String kakaoEmail = naverUserInfo.getEmail();
             Member sameEmailMember = memberRepository.findByEmail(kakaoEmail).orElse(null);
             if (sameEmailMember != null) {
-                kakaoMember = sameEmailMember;
+                naverMember = sameEmailMember;
                 // 기존 회원정보에 카카오 Id 추가
-                kakaoMember.setKakaoId(kakaoId);
+                naverMember.setKakaoId(kakaoId);
             } else {
                 // 신규 회원가입
                 // username: kakao nickname
-                String nickname = kakaoUserInfo.getNickname();
+                String nickname = naverUserInfo.getNickname();
 
                 // password: random UUID
                 String password = UUID.randomUUID().toString();
                 String encodedPassword = passwordEncoder.encode(password);
 
                 // email: kakao email
-                String email = kakaoUserInfo.getEmail();
+                String email = naverUserInfo.getEmail();
                 // role: 일반 사용자
                 Authority role = Authority.ROLE_USER;
 
-                kakaoMember = new Member(nickname, encodedPassword, email, role, kakaoId);
+                naverMember = new Member(nickname, encodedPassword, email, role, kakaoId);
             }
 
-            memberRepository.save(kakaoMember);
+            memberRepository.save(naverMember);
         }
-        return kakaoMember;
+        return naverMember;
     }
 
-    private void forceLogin(Member kakaoMember) {
-        MemberDetails memberDetails = new MemberDetails(kakaoMember);
+    private void forceLogin(Member naverMember) {
+        MemberDetails memberDetails = new MemberDetails(naverMember);
         Authentication authentication = new UsernamePasswordAuthenticationToken(memberDetails, null, memberDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }

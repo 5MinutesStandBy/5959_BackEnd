@@ -13,7 +13,7 @@ public class HeartController {
 
     private final HeartService heartService;
 
-    @PostMapping("/auth/heart/{board-id}")
+    @PostMapping("/heart/{board-id}")
     public void clickHeart(@PathVariable("board-id") Long boardId,
                            @AuthenticationPrincipal MemberDetails memberDetails) {
         heartService.heart(boardId, memberDetails.getMember());

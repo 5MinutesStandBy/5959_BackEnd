@@ -24,8 +24,8 @@ public class CommentService {
 
     // 댓글 작성 (권한)
     @Transactional
-    public ResponseDto<?> createComment(Member member, CommentReqDto commentReqDto, Long boardId) {
-        Board board = boardRepository.findById(boardId).orElseThrow(()->new RuntimeException("게시글이 존재하지 않습니다"));
+    public ResponseDto<?> createComment(Member member, CommentReqDto commentReqDto) {
+        Board board = boardRepository.findById(commentReqDto.getBoard_id()).orElseThrow(()->new RuntimeException("게시글이 존재하지 않습니다"));
         Comments comments = new Comments(commentReqDto, member, board);
         commentRepository.save(comments);
         return ResponseDto.success(comments);

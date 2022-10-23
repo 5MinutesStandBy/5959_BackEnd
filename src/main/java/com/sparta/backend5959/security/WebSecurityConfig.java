@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -60,7 +61,8 @@ public class WebSecurityConfig {
                 .sameOrigin()
                 /*
                  * X-Frame-Options 헤더 설정방법
-                 * 웹 어플리케이션에 HTML 삽입 취약점이 존재하면 공격자는 다른 서버에 위치한 페이지를 <frame>, <iframe>, <object> 등으로 삽입하여 다양한 공격에 사용할 수 있다.
+                 * 웹 어플리케이션에 HTML 삽입 취약점이 존재하면 공격자는 다른 서버에 위치한 페이지를
+                 * <frame>, <iframe>, <object> 등으로 삽입하여 다양한 공격에 사용할 수 있다.
                  * 피해자의 입장에서는 링크를 눌렀을 때 의도했던 것과는 다른 동작을 하게 한다하여 이를 클릭재킹(Clickjacking)이라 부른다.
                  * 웹 페이지를 공격에 필요한 형태로 조작하기 때문에 "사용자 인터페이스 덧씌우기"(User Interface redress) 공격이라고도 부른다.
                  * (XSS 공격을 생각하면 됨)
@@ -81,13 +83,29 @@ public class WebSecurityConfig {
                 // 세션 방식을 사용하지 않겠다는 말이 됨
 
                 // 토큰 없을 때 들어오는 요청 허가
+//                .and()
+//                .authorizeRequests()
+//                .antMatchers("/api/auth/**")
+//                .authenticated()
+//                .anyRequest()
+//                .permitAll()
+                // /api/auth/**로 오는 권한 인가 요청만 제외 확인, 인증처리, 그 외에는 무슨 요청이 오든 permitAll.
+
+                // 토큰 없을 때 들어오는 요청 허가
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/auth/**")
-                .authenticated()
+                // 홈 회원가입, 로그인 허용
+                .antMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                // 소셜 로그인 허용
+                .antMatchers(HttpMethod.POST, "/user/**").permitAll()
+                // 아래로는 다 인증, 인가 체크
+                .antMatchers(HttpMethod.POST).authenticated()
+                .antMatchers(HttpMethod.PUT).authenticated()
+                .antMatchers(HttpMethod.DELETE).authenticated()
+                .antMatchers("/api/mypage/**").authenticated()
+                // 그외 어떤 요청이 오든 허용
                 .anyRequest()
                 .permitAll()
-                // /api/auth/**로 오는 권한 인가 요청만 제외 확인, 인증처리, 그 외에는 무슨 요청이 오든 permitAll.
 
                 //  jwtFilter를 jwt 커스텀 설정을 만들어 UsernamePasswordAuthenticationFilter 보다 앞으로 오게 배치
                 .and()

@@ -13,18 +13,17 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/auth/boards")
+@RequestMapping("/api")
 public class CommentController {
 
     private final CommentService commentService;
 
     // 댓글 작성 (권한 필요)
-    @PostMapping("/{boardId}/comments")
+    @PostMapping("/comments")
     public ResponseDto<?> createComment(
-            @PathVariable Long boardId,
             @AuthenticationPrincipal MemberDetails memberDetails,
             @RequestBody @Valid CommentReqDto commentReqDto) {
-        return commentService.createComment(memberDetails.getMember(), commentReqDto, boardId);
+        return commentService.createComment(memberDetails.getMember(), commentReqDto);
     }
 
     // 댓글 수정하기 (권한 필요)

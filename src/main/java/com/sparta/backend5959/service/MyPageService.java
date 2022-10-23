@@ -2,16 +2,19 @@ package com.sparta.backend5959.service;
 
 
 import com.sparta.backend5959.dto.ResponseDto;
-import com.sparta.backend5959.entity.Comments;
-import com.sparta.backend5959.entity.Heart;
+import com.sparta.backend5959.entity.Board;
 import com.sparta.backend5959.entity.Member;
 import com.sparta.backend5959.repository.BoardRepository;
 import com.sparta.backend5959.repository.CommentRepository;
 import com.sparta.backend5959.repository.HeartRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,17 +27,44 @@ public class MyPageService {
     // 내 게시글 불러오기
     public ResponseDto<?> getMyBoardList(Member member) {
         return ResponseDto.success(boardRepository.findAllByMember(member).orElseThrow
-                (() -> new RuntimeException("아이디로 작성된 게시글은 찾을 수 없습니다")));
+                (() -> new RuntimeException(member.getUsername() + "님이 작성한 게시글을 찾을 수 없습니다")));
     }
     // 내 댓글 불러오기
-    public List<Comments> getMyCommentList(Member member) {
-        return commentRepository.findAllByMember(member).orElseThrow
-                (() -> new RuntimeException("아이디로 작성된 댓글은 찾을 수 없습니다"));
+    public ResponseDto<?> getMyCommentList(Member member) {
+        return ResponseDto.success(commentRepository.findAllByMember(member).orElseThrow
+                (() -> new RuntimeException(member.getUsername() + "님이 작성한 댓글을 찾을 수 없습니다")));
     }
 
     // 내가 좋아요한 게시글 불러오기
-    public List<Heart> getMyHeartList(Member member) {
-        return heartRepository.findAllByMember(member).orElseThrow
-                (() -> new RuntimeException("좋아요한 글은 찾을 수 없습니다"));
+    public ResponseDto<?> getMyHeartList(Member member) {
+        return ResponseDto.success(heartRepository.findAllByMember(member).orElseThrow
+                (() -> new RuntimeException(member.getUsername() + "님이 좋아요한 게시글을 찾을 수 없습니다")));
+    }
+
+    // 내가 작성한 게시글 불러오기 (페이저)
+    public ResponseDto<?> getMyBoardPagerList(int page,int size,String sortBy,boolean isAsc, Member member) {
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return ResponseDto.success(boardRepository.findAllByMember(member, pageable).orElseThrow
+                (() -> new RuntimeException(member.getUsername() + "님이 작성한 게시글을 찾을 수 없습니다")));
+    }
+
+    // 내가 작성한 댓글 불러오기 (페이저)
+    public ResponseDto<?> getMyCommentPagerList(int page,int size,String sortBy,boolean isAsc, Member member) {
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return ResponseDto.success(commentRepository.findAllByMember(member, pageable).orElseThrow
+                (() -> new RuntimeException(member.getUsername() + "님이 작성한 댓글을 찾을 수 없습니다")));
+    }
+
+    // 내가 좋아요한 게시글 불러오기 (페이저)
+    public ResponseDto<?> getMyHeartPagerList(int page,int size,String sortBy,boolean isAsc, Member member) {
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return ResponseDto.success(heartRepository.findAllByMember(member, pageable).orElseThrow
+                (() -> new RuntimeException(member.getUsername() + "님이 좋아요한 게시글을 찾을 수 없습니다")));
     }
 }
