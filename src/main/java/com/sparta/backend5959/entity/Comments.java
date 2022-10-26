@@ -2,6 +2,7 @@ package com.sparta.backend5959.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.backend5959.dto.CommentReqDto;
+import com.sparta.backend5959.dto.CommentUpdateReqDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -46,8 +47,8 @@ public class Comments extends Timestamped {
         this.board = board;
     }
 
-    public void update( CommentReqDto commentReqDto) {
-        this.content = commentReqDto.getContent();
+    public void update(CommentUpdateReqDto commentUpdateReqDto) {
+        this.content = commentUpdateReqDto.getContent();
     }
 }
 

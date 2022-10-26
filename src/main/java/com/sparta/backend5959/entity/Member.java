@@ -26,9 +26,9 @@ public class Member extends Timestamped {
     @Column(nullable = false)
     private String password;
 
-    @JsonIgnore
-    @Column(nullable = false)
-    private String email;
+//    @JsonIgnore
+//    @Column(nullable = false)
+//    private String email;
 
     @Column(unique = true)
     private Long kakaoId;
@@ -37,18 +37,18 @@ public class Member extends Timestamped {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
-    public Member(String username, String password, String email, Authority authority) {
+    public Member(String username, String password, Authority authority) {
         this.username = username;
         this.password = password;
-        this.email = email;
+//        this.email = email;
         this.authority = authority;
         this.kakaoId = null;
     }
 
-    public Member(String username, String password, String email, Authority authority, Long kakaoId) {
+    public Member(String username, String password, Authority authority, Long kakaoId) {
         this.username = username;
         this.password = password;
-        this.email = email;
+//        this.email = email;
         this.authority = authority;
         this.kakaoId = kakaoId;
     }

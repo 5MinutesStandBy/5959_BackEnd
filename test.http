@@ -1,0 +1,104 @@
+###회원가입
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+
+{
+  "username": "youngsung",
+  "password": "youngSung1",
+  "passwordConfirm": "youngSung1"
+}
+
+###로그인
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "youngsung",
+  "password": "youngSung1"
+}
+
+###게시글 생성
+POST http://localhost:8080/api/boards
+Content-Type: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5b3VuZ3N1bmciLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjY2ODIwOTgwfQ.FMPHYJwmQcRP8EGDLVvAqtwRawjJ1Qax7HvuecBHErQ
+
+{
+  "title": "게시글 제목",
+  "content": "게시글 내용"
+}
+
+###게시글 전체 조회
+GET http://localhost:8080/api/boards
+Content-Type: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5b3VuZ3N1bmciLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjY2ODIwOTgwfQ.FMPHYJwmQcRP8EGDLVvAqtwRawjJ1Qax7HvuecBHErQ
+
+###게시글 하나 조회
+GET http://localhost:8080/api/boards/3
+Content-Type: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5b3VuZ3N1bmciLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjY2ODIwOTgwfQ.FMPHYJwmQcRP8EGDLVvAqtwRawjJ1Qax7HvuecBHErQ
+
+###게시글 수정
+PUT http://localhost:8080/api/boards/5
+Content-Type: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5b3VuZ3N1bmciLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjY2ODIwOTgwfQ.FMPHYJwmQcRP8EGDLVvAqtwRawjJ1Qax7HvuecBHErQ
+
+{
+  "title": "게시글 제목 수정",
+  "content": "게시글 내용 수정"
+}
+
+###게시글 삭제
+DELETE http://localhost:8080/api/boards/2
+Content-Type: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5b3VuZ3N1bmciLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjY2ODIwOTgwfQ.FMPHYJwmQcRP8EGDLVvAqtwRawjJ1Qax7HvuecBHErQ
+
+###좋아요
+POST http://localhost:8080/api/heart/3
+Content-Type: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5b3VuZ3N1bmciLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjY2ODIyNzIyfQ.sv4vMO_eV3MjHt8haVkJBB4UVnRmBsrmLMBY-1-c_yc
+
+###댓글 작성
+POST http://localhost:8080/api/comments
+Content-Type: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5b3VuZ3N1bmciLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjY2ODIwOTgwfQ.FMPHYJwmQcRP8EGDLVvAqtwRawjJ1Qax7HvuecBHErQ
+
+{
+  "board_id": 5,
+  "content": "댓글 생성"
+}
+
+###댓글 수정
+PUT http://localhost:8080/api/comments/27
+Content-Type: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5b3VuZ3N1bmciLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjY2ODIwOTgwfQ.FMPHYJwmQcRP8EGDLVvAqtwRawjJ1Qax7HvuecBHErQ
+
+{
+  "content": "댓글 수정"
+}
+
+###댓글 삭제
+DELETE http://localhost:8080/api/comments/26
+Content-Type: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5b3VuZ3N1bmciLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjY2ODIwOTgwfQ.FMPHYJwmQcRP8EGDLVvAqtwRawjJ1Qax7HvuecBHErQ
+
+###현재 유저 정보 보내기
+GET http://localhost:8080/api/mypage/userinfo
+Content-Type: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5b3VuZ3N1bmciLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjY2ODIwOTgwfQ.FMPHYJwmQcRP8EGDLVvAqtwRawjJ1Qax7HvuecBHErQ
+
+###마이페이지
+
+###내가 작성한 게시글 불러오기
+GET http://localhost:8080/api/mypage/userboard
+Content-Type: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5b3VuZ3N1bmciLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjY2ODIwOTgwfQ.FMPHYJwmQcRP8EGDLVvAqtwRawjJ1Qax7HvuecBHErQ
+
+###내가 작성한 댓글 불러오기
+GET http://localhost:8080/api/mypage/usercomment
+Content-Type: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5b3VuZ3N1bmciLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjY2ODIwOTgwfQ.FMPHYJwmQcRP8EGDLVvAqtwRawjJ1Qax7HvuecBHErQ
+
+###내가 좋아요한 게시글 불러오기
+GET http://localhost:8080/api/mypage/usercomment
+Content-Type: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5b3VuZ3N1bmciLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjY2ODIwOTgwfQ.FMPHYJwmQcRP8EGDLVvAqtwRawjJ1Qax7HvuecBHErQ
