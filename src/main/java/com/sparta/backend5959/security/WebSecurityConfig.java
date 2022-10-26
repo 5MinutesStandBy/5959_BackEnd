@@ -98,8 +98,9 @@ public class WebSecurityConfig {
                 .antMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
                 // 소셜 로그인 허용
                 .antMatchers(HttpMethod.POST, "/user/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/**").permitAll()
                 // 아래로는 다 인증, 인가 체크
-                .antMatchers(HttpMethod.POST).authenticated()
+//                .antMatchers(HttpMethod.POST).authenticated()
                 .antMatchers(HttpMethod.PUT).authenticated()
                 .antMatchers(HttpMethod.DELETE).authenticated()
                 .antMatchers("/api/mypage/**").authenticated()

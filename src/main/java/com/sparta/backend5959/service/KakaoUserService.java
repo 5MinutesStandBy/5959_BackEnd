@@ -8,6 +8,7 @@ import com.sparta.backend5959.entity.Member;
 import com.sparta.backend5959.repository.MemberRepository;
 import com.sparta.backend5959.security.Authority;
 import com.sparta.backend5959.security.MemberDetails;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -30,7 +31,7 @@ public class KakaoUserService {
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
 
-    @Value("#{environment['kakao.Key']}")
+    @Value("${kakao.Key}")
     private String key;
 
     @Autowired

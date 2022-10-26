@@ -35,6 +35,8 @@ public class Board extends Timestamped {
     @Column(nullable = false)
     private String author;
 
+    //ManyToOne은 fetch default가 EAGER이므로 LAZY 붙여줘야함
+    //OneToMany는 fetch default가 LAZY이므로 빼줘도 됨
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
