@@ -2,6 +2,8 @@ package com.sparta.backend5959.service;
 
 
 import com.sparta.backend5959.dto.CommentReqDto;
+import com.sparta.backend5959.dto.CommentResDto;
+import com.sparta.backend5959.dto.CommentUpdateReqDto;
 import com.sparta.backend5959.dto.ResponseDto;
 import com.sparta.backend5959.entity.Board;
 import com.sparta.backend5959.entity.Comments;
@@ -22,25 +24,26 @@ public class CommentService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
 
-    // 댓글 작성 (권한)
+       // 댓글 작성 (권한)
     @Transactional
     public ResponseDto<?> createComment(Member member, CommentReqDto commentReqDto) {
         Board board = boardRepository.findById(commentReqDto.getBoard_id()).orElseThrow(()->new RuntimeException("게시글이 존재하지 않습니다"));
         Comments comments = new Comments(commentReqDto, member, board);
         commentRepository.save(comments);
-        return ResponseDto.success(comments);
+        CommentResDto commentResDto = new CommentResDto(comments);
+        return ResponseDto.success(commentResDto);
     }
 
     // 댓글 수정 (권한)
     @Transactional
-    public ResponseDto<?> editComment(Long id, Member member, CommentReqDto commentReqDto) {
+    public ResponseDto<?> editComment(Long id, Member member, CommentUpdateReqDto commentUpdateReqDto) {
         Comments comments = commentRepository.findById(id).orElseThrow(
                 ()->new RuntimeException("댓글을 찾을 수 없습니다")
         );
         if(!comments.getMember().getUsername().equals(member.getUsername())) {
             throw new RuntimeException("본인이 작성한 댓글이 아닙니다");
         }
-        comments.update(commentReqDto);
+        comments.update(commentUpdateReqDto);
         commentRepository.save(comments);
         return ResponseDto.success(comments);
     }

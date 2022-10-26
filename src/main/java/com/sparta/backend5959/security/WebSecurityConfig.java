@@ -15,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsUtils;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -44,7 +45,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // CSRF
         http.csrf().disable()
-
+                .cors().disable()
                 // 예외처리 커스텀 클레스 추가
                 .exceptionHandling()
                 // 익셉션 제어
@@ -94,13 +95,14 @@ public class WebSecurityConfig {
                 // 토큰 없을 때 들어오는 요청 허가
                 .and()
                 .authorizeRequests()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 // 홈 회원가입, 로그인 허용
                 .antMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
                 // 소셜 로그인 허용
                 .antMatchers(HttpMethod.POST, "/user/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/**").permitAll()
+//                .antMatchers(HttpMethod.POST, "/api/**").permitAll()
                 // 아래로는 다 인증, 인가 체크
-//                .antMatchers(HttpMethod.POST).authenticated()
+                .antMatchers(HttpMethod.POST).authenticated()
                 .antMatchers(HttpMethod.PUT).authenticated()
                 .antMatchers(HttpMethod.DELETE).authenticated()
                 .antMatchers("/api/mypage/**").authenticated()

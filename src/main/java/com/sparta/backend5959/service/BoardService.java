@@ -28,7 +28,7 @@ public class BoardService {
     // 게시판 전부 불러오기 (+댓글)
     @Transactional
     public ResponseDto<?> getBoardList() {
-        return ResponseDto.success(boardRepository.findAllByOrderByModifiedAtDesc());
+        return ResponseDto.success(boardRepository.findAllByOrderByIdDesc());
     }
 
     // 게시판 페이지로 불러오기

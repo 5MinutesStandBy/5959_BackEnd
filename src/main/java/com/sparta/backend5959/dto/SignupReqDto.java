@@ -20,6 +20,6 @@ public class SignupReqDto {
     private String passwordConfirm;
 
 //    @Pattern(regexp = "^[a-zA-Z0-9]@[a-zA-Z].[a-z]$", message = "잘못된 이메일 형식입니다")
-    @NotBlank(message = "이메일을 입력해주세요")
-    private String email;
+//    @NotBlank(message = "이메일을 입력해주세요")
+//    private String email;
 }

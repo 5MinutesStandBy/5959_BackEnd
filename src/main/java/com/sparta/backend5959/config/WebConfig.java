@@ -14,14 +14,16 @@ public class WebConfig implements WebMvcConfigurer {
         reg
                 // 전부 허용
                 .addMapping("/**")
-                .allowedOrigins("http://localhost:3000")
-                .allowedMethods(
-                        HttpMethod.GET.name(),
-                        HttpMethod.POST.name(),
-                        HttpMethod.PUT.name(),
-                        HttpMethod.DELETE.name()
-                )
-                .exposedHeaders("Authorization","Refresh-Token")
+                .allowedOrigins("http://localhost:3000", "http://localhost:3001")
+                .allowedMethods("GET","POST","PUT","DELETE")
+//                .allowedMethods(
+//                        HttpMethod.GET.name(),
+//                        HttpMethod.POST.name(),
+//                        HttpMethod.PUT.name(),
+//                        HttpMethod.DELETE.name()
+//                )
+//                .allowedHeaders("*")
+                .exposedHeaders("Authorization","RefreshToken")
                 .allowCredentials(true);
     }
 }

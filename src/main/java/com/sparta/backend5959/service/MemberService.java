@@ -46,14 +46,14 @@ public class MemberService implements UserDetailsService {
         String username = signupReqDto.getUsername();
         String password = signupReqDto.getPassword();
         String passwordConfirm = signupReqDto.getPasswordConfirm();
-        String email = signupReqDto.getEmail();
+//        String email = signupReqDto.getEmail();
         if(memberRepository.existsByUsername(username)) {
             throw new RuntimeException("이미 가입된 유저입니다");
         }
         if(!password.equals(passwordConfirm)) {
             throw new RuntimeException("비밀번호와 비밀번호 확인이 일치하지 않습니다");
         }
-        Member member = new Member(username, passwordEncoder.encode(password), email, Authority.ROLE_USER);
+        Member member = new Member(username, passwordEncoder.encode(password), Authority.ROLE_USER);
         return ResponseDto.success(memberRepository.save(member));
     }
 
@@ -85,7 +85,7 @@ public class MemberService implements UserDetailsService {
         HttpHeaders httpHeaders = new HttpHeaders();
         // 규칙인 Authorization 필드 만들고 Jwt 토큰이니까 value에 Bearer 붙여줌 그리고 위에서 만든 토큰들 붙임
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, JwtFilter.BEARER_PREFIX + tokenDto.getAccessToken());
-        httpHeaders.add("Refresh-Token", tokenDto.getRefreshToken());
+        httpHeaders.add("RefreshToken", tokenDto.getRefreshToken());
 
         // 토큰 발급
         return new ResponseEntity<>(ResponseDto.success(member), httpHeaders, HttpStatus.OK);

@@ -1,6 +1,7 @@
 package com.sparta.backend5959.service;
 
 
+import com.sparta.backend5959.dto.MyPageBoardResDto;
 import com.sparta.backend5959.dto.ResponseDto;
 import com.sparta.backend5959.entity.Board;
 import com.sparta.backend5959.entity.Member;
@@ -13,8 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,9 +27,15 @@ public class MyPageService {
 
     // 내 게시글 불러오기
     public ResponseDto<?> getMyBoardList(Member member) {
-        return ResponseDto.success(boardRepository.findAllByMember(member).orElseThrow
-                (() -> new RuntimeException(member.getUsername() + "님이 작성한 게시글을 찾을 수 없습니다")));
+        List<Board> boardList = boardRepository.findAllByMember(member).orElseThrow(() -> new RuntimeException(member.getUsername() + "님이 작성한 게시글을 찾을 수 없습니다"));
+        List<MyPageBoardResDto> myPageBoardListResDto = new ArrayList<>();
+        for (Board board : boardList) {
+            MyPageBoardResDto myPageBoardResDto = new MyPageBoardResDto(board);
+            myPageBoardListResDto.add(myPageBoardResDto);
+        }
+        return ResponseDto.success(myPageBoardListResDto);
     }
+
     // 내 댓글 불러오기
     public ResponseDto<?> getMyCommentList(Member member) {
         return ResponseDto.success(commentRepository.findAllByMember(member).orElseThrow

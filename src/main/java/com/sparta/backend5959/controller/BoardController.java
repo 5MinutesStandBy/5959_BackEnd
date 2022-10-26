@@ -52,7 +52,7 @@ public class BoardController {
     }
 
     // 게시판 생성 (권한 필요)
-    @PostMapping("/boards")
+    @PostMapping(value = "/boards", consumes = {"text/plain", "application/*"})
     public ResponseDto<?> createBoard(
             @RequestBody @Valid BoardReqDto boardReqDto,
             @AuthenticationPrincipal MemberDetails memberDetails

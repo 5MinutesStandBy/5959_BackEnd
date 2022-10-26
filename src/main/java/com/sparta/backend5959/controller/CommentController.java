@@ -2,6 +2,7 @@ package com.sparta.backend5959.controller;
 
 
 import com.sparta.backend5959.dto.CommentReqDto;
+import com.sparta.backend5959.dto.CommentUpdateReqDto;
 import com.sparta.backend5959.dto.ResponseDto;
 import com.sparta.backend5959.security.MemberDetails;
 import com.sparta.backend5959.service.CommentService;
@@ -27,12 +28,12 @@ public class CommentController {
     }
 
     // 댓글 수정하기 (권한 필요)
-    @PostMapping("/comments/{id}")
+    @PutMapping("/comments/{id}")
     public ResponseDto<?> editComment(
             @PathVariable Long id,
             @AuthenticationPrincipal MemberDetails memberDetails,
-            @RequestBody CommentReqDto commentReqDto) {
-        return commentService.editComment(id, memberDetails.getMember(), commentReqDto);
+            @RequestBody CommentUpdateReqDto commentUpdateReqDto) {
+        return commentService.editComment(id, memberDetails.getMember(), commentUpdateReqDto);
     }
 
     // 댓글 삭제하기 (권한 필요)
