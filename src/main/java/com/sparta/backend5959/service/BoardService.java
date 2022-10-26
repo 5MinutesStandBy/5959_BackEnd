@@ -32,6 +32,7 @@ public class BoardService {
     }
 
     // 게시판 페이지로 불러오기
+    @Transactional
     public ResponseDto<?> getBoardPagerList(int page,int size,String sortBy,boolean isAsc) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
@@ -40,6 +41,7 @@ public class BoardService {
     }
 
     // 게시판 무한 스크롤로 불러오기
+    @Transactional
     public ResponseDto<?> getBoardInfiniteScroll(int page,int size,String sortBy,boolean isAsc) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
@@ -58,6 +60,7 @@ public class BoardService {
 
     // 권한
     // 게시판 생성
+    @Transactional
     public ResponseDto<?> createBoard(BoardReqDto boardReqDto, Member member) {
         Board board = new Board(boardReqDto, member);
         return ResponseDto.success(boardRepository.save(board));

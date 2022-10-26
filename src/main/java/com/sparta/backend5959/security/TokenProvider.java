@@ -35,7 +35,7 @@ public class TokenProvider {
     private final Key key;
 
     @Autowired
-    public TokenProvider(@Value("#{environment['secret.key']}") String secretKey, MemberRepository memberRepository) {
+    public TokenProvider(@Value("${secret.key}") String secretKey, MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
         // 현재 정한 sercret_key는 BASE64 encoding으로 암호화 시켜놓은 상태이므로 풀어야함
         // Keys 메소드를 사용해 안전하게 암호화를 할 것이므로 byte[] 로 되어 있어야 함
