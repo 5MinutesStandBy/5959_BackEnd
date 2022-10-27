@@ -11,13 +11,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface HeartRepository extends JpaRepository<Heart, Long> {
-
     boolean existsByBoardAndMember(Board boardId, Member member);
-
     void deleteByBoardAndMember(Board boardId, Member member);
-
-    List<Heart> findAllByBoard(Board board);
-
-    Optional<List<Heart>> findAllByMember(Member member);
-    Optional<Page<Heart>> findAllByMember(Member member, Pageable pageable);
+    List<Heart> findAllByMember(Member member);
+    Page<Heart> findAllByMember(Member member, Pageable pageable);
 }

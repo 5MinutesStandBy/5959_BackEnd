@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -36,6 +38,16 @@ public class Member extends Timestamped {
     @JsonIgnore
     @Enumerated(EnumType.STRING)
     private Authority authority;
+
+    // 관계성 읽기 전용 (허트가 잘 읽어갈 수 있도록 읽기 설정해줌)
+    @OneToMany(mappedBy = "member")
+    private List<Heart> heartList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Board> boardList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Comments> commentsList = new ArrayList<>();
 
     public Member(String username, String password, Authority authority) {
         this.username = username;

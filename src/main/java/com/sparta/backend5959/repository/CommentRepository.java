@@ -12,6 +12,6 @@ import java.util.Optional;
 
 public interface CommentRepository extends JpaRepository<Comments, Long> {
     List<Comments> findAllByBoard(Board board);
-    Optional<List<Comments>> findAllByMember(Member member);
-    Optional<Page<Comments>> findAllByMember(Member member, Pageable pageable);
+    List<Comments> findAllByMember(Member member);
+    Page<Comments> findAllByMember(Member member, Pageable pageable);
 }

@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -120,5 +121,14 @@ public class MemberService implements UserDetailsService {
 
         // 새로 토큰 발급했으니 클라이언트한테 돌려준다
         return tokenDto;
+    }
+
+    //아이디 중복 확인
+    public ResponseDto<?> duplicateCheckId(String username) {
+        if (memberRepository.existsByUsername(username))
+            return ResponseDto.fail("아이디 중복", "중복된 아이디 값입니다");
+        else {
+            return ResponseDto.success("사용할 수 있는 아이디 입니다");
+        }
     }
 }
