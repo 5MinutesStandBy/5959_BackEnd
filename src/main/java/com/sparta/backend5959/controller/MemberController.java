@@ -2,11 +2,9 @@ package com.sparta.backend5959.controller;
 
 
 import com.sparta.backend5959.dto.*;
-import com.sparta.backend5959.security.MemberDetails;
 import com.sparta.backend5959.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,6 +27,13 @@ public class MemberController {
     public ResponseEntity<?> login(@RequestBody LoginReqDto loginReqDto) {
         return memberService.loginAccount(loginReqDto);
     }
+
+    // 아이디 중복확인
+    @PostMapping("/checkid")
+    public ResponseDto<?> checkId(@RequestBody CheckidDto checkidDto) {
+        return memberService.duplicateCheckId(checkidDto.getUsername());
+    }
+
 
     // 토큰 재발급
     @PostMapping("/reissue")
